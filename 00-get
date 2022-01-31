@@ -2,9 +2,22 @@
 
 unset LANG
 
-rm *.tab
+# download files
 
-wget -q $( wget -q -O - 'http://www.fa-technik.adfc.de/code/opengeodb/' | egrep -o '<a.*href=".*\.tab"' | sed -e 's:.*href="::' -e 's:".*::' -e 's+^+http://www.fa-technik.adfc.de/code/opengeodb/+' | grep -v '[0-9]' )
+if ! wget -q $( wget -q -O - 'http://www.fa-technik.adfc.de/code/opengeodb/' | egrep -o '<a.*href=".*\.tab"' | sed -e 's:.*href="::' -e 's:".*::' -e 's+^+http://www.fa-technik.adfc.de/code/opengeodb/+' | grep -v '[0-9]' ); then
+
+	echo
+	echo "*** Download failed ... aborting ***"
+	echo
+	exit 1
+
+fi
+
+# rename new downloaded files
+
+for f in *.1; do mv -v "$f" "$( basename "$f" .1 )"; done
+
+# update git
 
 git add -A .
 git commit -m "update $( date )"
