@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd "$( dirname "$0" )"
+
 unset LANG
 
 # download files
@@ -17,8 +19,16 @@ fi
 
 for f in *.1; do mv -v "$f" "$( basename "$f" .1 )"; done
 
+# create json files
+
+(
+	echo "UID=$( id -u "$USER" )"
+	echo "GID=$( id -g "$USER" )"
+) > .env
+
+docker-compose up
+
 # update git
 
 git add -A .
 git commit -m "update $( date )"
-

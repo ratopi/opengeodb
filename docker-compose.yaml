@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+   converter:
+      image: "docker.io/ratopi/opengeodb-converter:latest"
+      restart: "no"
+      user: "$UID:$GID"
+      command: "*.tab"
+      volumes:
+         - "./:/data/"
